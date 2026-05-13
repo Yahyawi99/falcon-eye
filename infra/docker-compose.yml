@@ -86,7 +86,7 @@ services:
       - hbase-master
 
   flume:
-    image: flume-hbase2:1.0.0 # ← use pre-loaded image, no build
+    image: flume-hbase2:1.0.0
     container_name: flume-service
     restart: on-failure
     depends_on:

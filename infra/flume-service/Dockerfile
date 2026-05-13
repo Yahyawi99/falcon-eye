@@ -17,28 +17,55 @@ RUN wget -q "https://archive.apache.org/dist/flume/${FLUME_VERSION}/apache-flume
     mv "apache-flume-${FLUME_VERSION}-bin" "${FLUME_HOME}" && \
     rm "apache-flume-${FLUME_VERSION}-bin.tar.gz"
 
-# ── Strip Flume's bundled HBase 1.x JARs ────────────────────────────────────
-# Flume 1.11 ships old hbase-client 1.x jars that conflict with HBase 2.x.
-# We remove them before adding the correct 2.0.1 ones.
+# ── Strip Flume's bundled HBase 1.x JARs & Protobuf ──────────────────────────
+# We MUST remove protobuf-java-2.5.0.jar as it conflicts with HBase 2.x
 RUN find "${FLUME_HOME}/lib" -name "hbase-*.jar" -delete && \
-    find "${FLUME_HOME}/lib" -name "htrace-*.jar" -delete && \
-    find "${FLUME_HOME}/lib" -name "protobuf-java-*.jar" -delete
+    find "${FLUME_HOME}/lib" -name "asynchbase-*.jar" -delete && \
+    find "${FLUME_HOME}/lib" -name "protobuf-java-2.5.0.jar" -delete
 
-# ── Download HBase 2.0.1 client JARs from Maven Central ─────────────────────
+# ── Add HBase 2.0.1 Libraries ────────────────────────────────────────────────
+# Added hbase-protocol which is often required by the sink
 RUN wget -q -P "${FLUME_HOME}/lib" \
-    "https://repo1.maven.org/maven2/org/apache/hbase/hbase-shaded-client/${HBASE_VERSION}/hbase-shaded-client-${HBASE_VERSION}.jar" && \
-    wget -q -P "${FLUME_HOME}/lib" \
     "https://repo1.maven.org/maven2/org/apache/hbase/hbase-client/${HBASE_VERSION}/hbase-client-${HBASE_VERSION}.jar" && \
     wget -q -P "${FLUME_HOME}/lib" \
     "https://repo1.maven.org/maven2/org/apache/hbase/hbase-common/${HBASE_VERSION}/hbase-common-${HBASE_VERSION}.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/org/apache/hbase/hbase-protocol/${HBASE_VERSION}/hbase-protocol-${HBASE_VERSION}.jar" && \
     wget -q -P "${FLUME_HOME}/lib" \
     "https://repo1.maven.org/maven2/org/apache/hbase/hbase-protocol-shaded/${HBASE_VERSION}/hbase-protocol-shaded-${HBASE_VERSION}.jar" && \
     wget -q -P "${FLUME_HOME}/lib" \
     "https://repo1.maven.org/maven2/org/apache/hbase/hbase-zookeeper/${HBASE_VERSION}/hbase-zookeeper-${HBASE_VERSION}.jar" && \
     wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/org/apache/hbase/hbase-hadoop-compat/${HBASE_VERSION}/hbase-hadoop-compat-${HBASE_VERSION}.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/org/apache/hbase/hbase-hadoop2-compat/${HBASE_VERSION}/hbase-hadoop2-compat-${HBASE_VERSION}.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-common/2.7.7/hadoop-common-2.7.7.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-auth/2.7.7/hadoop-auth-2.7.7.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
     "https://repo1.maven.org/maven2/org/apache/hbase/hbase-metrics-api/${HBASE_VERSION}/hbase-metrics-api-${HBASE_VERSION}.jar" && \
     wget -q -P "${FLUME_HOME}/lib" \
-    "https://repo1.maven.org/maven2/org/apache/hbase/hbase-metrics/${HBASE_VERSION}/hbase-metrics-${HBASE_VERSION}.jar"
+    "https://repo1.maven.org/maven2/org/apache/hbase/hbase-metrics/${HBASE_VERSION}/hbase-metrics-${HBASE_VERSION}.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/org/apache/hbase/hbase-procedure/${HBASE_VERSION}/hbase-procedure-${HBASE_VERSION}.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/org/apache/hbase/thirdparty/hbase-shaded-miscellaneous/2.1.0/hbase-shaded-miscellaneous-2.1.0.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/org/apache/hbase/thirdparty/hbase-shaded-protobuf/2.1.0/hbase-shaded-protobuf-2.1.0.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/org/apache/hbase/thirdparty/hbase-shaded-netty/2.1.0/hbase-shaded-netty-2.1.0.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/org/apache/htrace/htrace-core4/4.2.0-incubating/htrace-core4-4.2.0-incubating.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/commons-configuration/commons-configuration/1.10/commons-configuration-1.10.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/commons-lang/commons-lang/2.6/commons-lang-2.6.jar" && \
+    # ── FINAL MISSING PIECE: The Shaded Client itself ──
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/org/apache/hbase/hbase-shaded-client/${HBASE_VERSION}/hbase-shaded-client-${HBASE_VERSION}.jar" && \
+    wget -q -P "${FLUME_HOME}/lib" \
+    "https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/2.5.0/protobuf-java-2.5.0.jar"
 
 # ── Copy conf (flume.conf + hbase-site.xml) ──────────────────────────────────
 COPY conf/ ${FLUME_HOME}/conf/
@@ -47,6 +74,10 @@ COPY conf/ ${FLUME_HOME}/conf/
 EXPOSE 44444
 
 ENV FLUME_AGENT_NAME=agent
+
+# Flume's flume-ng script hardcodes -Xmx20m and ignores JAVA_OPTS.
+# We patch the script directly to replace that value.
+RUN sed -i 's/-Xmx20m/-Xms256m -Xmx512m/g' ${FLUME_HOME}/bin/flume-ng
 
 CMD flume-ng agent \
     --name ${FLUME_AGENT_NAME} \
