@@ -85,21 +85,6 @@ services:
     depends_on:
       - hbase-master
 
-  flume:
-    image: flume-hbase2:1.0.0
-    container_name: flume-service
-    restart: on-failure
-    depends_on:
-      - zookeeper
-      - hbase-master
-      - hbase-region
-    environment:
-      - FLUME_AGENT_NAME=agent
-    ports:
-      - "44444:44444"
-    networks:
-      - ubuntu_default
-
 networks:
   ubuntu_default:
     external: true
