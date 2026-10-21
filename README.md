@@ -55,7 +55,3 @@ Developed for the JEE & Big Data project in the Big Data & IoT Master's program 
 
 Event data is from [ACLED](https://acleddata.com). The dataset is not included in this repository.
 
-## Authors
-
-- **Yassine Yahyawi**: [GitHub](https://github.com/Yahyawi99)
-- **Zakaria Bettar**
