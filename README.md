@@ -6,9 +6,8 @@ Falcon Eye brings more than 400,000 public ACLED events into a map and analytics
 
 ## Project demo
 
-<video src="assets/falcon-eye.mp4" autoplay muted playsinline controls width="100%" poster="assets/image.png" title="Falcon Eye project demo"></video>
+https://github.com/user-attachments/assets/9c916c10-283b-4c59-ad1a-a66cf478df46
 
-![Falcon Eye dashboard showing the operational snapshot and conflict map](assets/image.png)
 
 ## What it does
 
