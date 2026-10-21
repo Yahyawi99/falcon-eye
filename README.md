@@ -4,7 +4,7 @@
 
 Falcon Eye brings more than 400,000 public ACLED events into a map and analytics dashboard. Built as a JEE and Big Data project at ENSAM Casablanca, it combines a React frontend with a Spring Boot API, HBase event storage, and a MySQL-backed user system.
 
-## Project demo
+## Project demo (AWS EC2 instance free trial has been expired)
 
 https://github.com/user-attachments/assets/9c916c10-283b-4c59-ad1a-a66cf478df46
 
