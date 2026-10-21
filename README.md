@@ -6,11 +6,9 @@ Falcon Eye brings more than 400,000 public ACLED events into a map and analytics
 
 ## Project demo
 
-<video controls playsinline width="100%" poster="image.png" title="Falcon Eye project demo">
-	<source src="falcon-eye%20video.mp4" type="video/mp4">
-</video>
+<video src="assets/falcon-eye.mp4" autoplay muted playsinline controls width="100%" poster="assets/image.png" title="Falcon Eye project demo"></video>
 
-![Falcon Eye dashboard showing the operational snapshot and conflict map](image.png)
+![Falcon Eye dashboard showing the operational snapshot and conflict map](assets/image.png)
 
 ## What it does
 
@@ -25,15 +23,15 @@ Falcon Eye brings more than 400,000 public ACLED events into a map and analytics
 
 ### Conflict map and event details
 
-![Interactive conflict map with clustered event markers](image-1.png)
+![Interactive conflict map with clustered event markers](assets/image-1.png)
 
-![Event detail panel for a selected map marker](image-2.png)
+![Event detail panel for a selected map marker](assets/image-2.png)
 
 ### Analytics and news
 
-![Historical event trends, event-type breakdown, and regional comparison](image-3.png)
+![Historical event trends, event-type breakdown, and regional comparison](assets/image-3.png)
 
-![News article view with summary, source, and bookmark action](image-4.png)
+![News article view with summary, source, and bookmark action](assets/image-4.png)
 
 ## Architecture and technology
 
